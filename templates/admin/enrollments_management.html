@@ -1,0 +1,116 @@
+{% extends 'admin/admin_base.html' %}
+
+{% block title %}
+  Enrollments Management
+{% endblock %}
+
+{% block content %}
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h4 class="fw-semibold mb-0">Enrollments Management</h4>
+
+    <a href="{% url 'admin_panel:add_enrollment' %}" class="btn btn-primary"><i class="fas fa-plus me-1"></i> Add Enrollment</a>
+  </div>
+
+  <div class="card border-0 shadow-sm rounded-4">
+    <!-- FILTER + SEARCH -->
+    <div class="card-body border-bottom">
+    <form method="get">
+        <div class="row g-2">
+
+            <!-- STATUS FILTER -->
+            <div class="col-md-3">
+                 <select name="status" class="form-select">
+                    <option value="">All Statuses</option>
+                    <option value="pending"
+                        {% if request.GET.status == "pending" %}selected{% endif %}>
+                        Pending
+                    </option>
+                    <option value="in_progress"
+                        {% if request.GET.status == "in_progress" %}selected{% endif %}>
+                        In Progress
+                    </option>
+                    <option value="completed"
+                        {% if request.GET.status == "completed" %}selected{% endif %}>
+                        Completed
+                    </option>
+                </select>
+            </div>
+
+            <!-- SEARCH -->
+            <div class="col-md-5 ms-auto">
+                <div class="input-group">
+                    <input type="text"
+                           name="q"
+                           value="{{ request.GET.q }}"
+                           class="form-control"
+                           placeholder="Search enrollments...">
+                    <button class="btn btn-primary" type="submit">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </form>
+</div>
+
+
+    <!-- TABLE -->
+    <div class="table-responsive">
+      <table class="table align-middle mb-0">
+        <thead class="table-light">
+          <tr>
+            <th>Student</th>
+            <th>Course</th>
+            <th>Status</th>
+            <th>Date Enrolled</th>
+            <th class="text-center">Actions</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {% for enrollment in enrollments %}
+            <tr>
+              <td>
+                <div class="d-flex align-items-center gap-2">
+                  <img src="{{ enrollment.student.profile_picture.url }}" width="36" height="36" class="rounded-circle" onerror="this.src='/static/images/default-user.png'" />
+                  <div>
+                    <div class="fw-semibold">{{ enrollment.student.username }}</div>
+                    <small class="text-muted">{{ enrollment.student.email }}</small>
+                  </div>
+                </div>
+              </td>
+
+              <td>{{ enrollment.course.title }}</td>
+
+              <td>
+                {% if enrollment.status == 'pending' %}
+                  <span class="badge bg-warning-subtle text-warning">Pending</span>
+                {% elif enrollment.status == 'in_progress' %}
+                  <span class="badge bg-info-subtle text-info">In Progress</span>
+                {% else %}
+                  <span class="badge bg-success-subtle text-success">Completed</span>
+                {% endif %}
+              </td>
+
+              <td>{{ enrollment.enrolled_at|date:'M d, Y' }}</td>
+
+              <td class="text-center">
+                <a href="{% url 'admin_panel:edit_enrollment' enrollment.id %}" class="btn btn-sm btn-warning text-white"><i class="fas fa-pen"></i></a>
+
+                <form method="post" action="{% url 'admin_panel:delete_enrollment' enrollment.id %}" style="display:inline;">
+                  {% csrf_token %}
+                  <button type="submit" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></button>
+                </form>
+              </td>
+            </tr>
+          {% empty %}
+            <tr>
+              <td colspan="5" class="text-center text-muted py-4">No enrollments found</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+{% endblock %}

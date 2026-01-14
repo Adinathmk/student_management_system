@@ -1,0 +1,35 @@
+<div class="d-flex flex-column h-100 overflow-hidden">
+  <!-- PROFILE -->
+  <div class="user-profile-section text-center border-bottom py-4">
+    <div class="avatar-circle mb-2">
+      <i class="fas fa-user-graduate"></i>
+    </div>
+    <div class="fw-bold">{{ request.user.username }}</div>
+    <span class="badge bg-light text-muted border fw-normal">Student Portal</span>
+  </div>
+
+  <!-- MENU -->
+  <div class="flex-grow-1 overflow-auto px-2 py-3">
+    <ul class="nav flex-column gap-2">
+      <li class="nav-item">
+        <a class="nav-link d-flex align-items-center gap-2
+          {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}" href="{% url 'students:dashboard' %}"><i class="fas fa-columns"></i> Dashboard</a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link d-flex align-items-center gap-2
+          {% if request.resolver_match.url_name == 'courses' %}active{% endif %}" href="{% url 'courses:courses' %}"><i class="fas fa-book-open"></i> Courses</a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link d-flex align-items-center gap-2
+          {% if request.resolver_match.url_name == 'profile' %}active{% endif %}" href="{% url 'students:profile' %}"><i class="fas fa-user-circle"></i> Profile</a>
+      </li>
+    </ul>
+  </div>
+
+  <!-- LOGOUT -->
+  <div class="p-3 border-top">
+    <a class="nav-link text-danger fw-semibold d-flex align-items-center gap-2" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i> Logout</a>
+  </div>
+</div>

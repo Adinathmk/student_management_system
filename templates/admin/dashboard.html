@@ -1,0 +1,132 @@
+{% extends "admin/admin_base.html" %}
+
+{% block content %}
+
+<h4 class="fw-semibold mb-1">Hello, Admin! 👋</h4>
+<p class="text-muted mb-4">Here's what's happening in your academy today.</p>
+
+<!-- STATS -->
+<div class="row g-3 mb-4">
+
+    <div class="col-md-4">
+        <div class="stat-card">
+            <div>
+                <small class="text-muted">Total Students</small>
+                <h3 class="mb-0">{{ total_students }}</h3>
+            </div>
+            <div class="stat-icon bg-primary-subtle text-primary">
+                <i class="fas fa-user-graduate"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="stat-card">
+            <div>
+                <small class="text-muted">Active Courses</small>
+                <h3 class="mb-0">{{ active_courses }}</h3>
+            </div>
+            <div class="stat-icon bg-warning-subtle text-warning">
+                <i class="fas fa-book-open"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="stat-card">
+            <div>
+                <small class="text-muted">Total Enrollments</small>
+                <h3 class="mb-0">{{ total_enrollments }}</h3>
+            </div>
+            <div class="stat-icon bg-danger-subtle text-danger">
+                <i class="fas fa-chart-line"></i>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<div class="row g-4">
+
+    <!-- RECENT STUDENTS -->
+    <div class="col-lg-8">
+        <div class="card border-0 shadow-sm rounded-4">
+            <div class="card-body">
+                <div class="d-flex justify-content-between mb-3">
+                    <h6 class="fw-semibold">Recent Students</h6>
+                    <a class="text-primary text-decoration-none" href="{%url "admin_panel:students"%}"> View All</a>
+                </div>
+
+                <table class="table align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Name</th>
+                            <th>Date Joined</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for student in recent_students %}
+                        <tr>
+                            <td>
+                                <div class="d-flex gap-2 align-items-center">
+                                    <div class="avatar-sm">
+                                        {{ student.username|first|upper }}
+                                    </div>
+                                    <div>
+                                        <div class="fw-semibold">{{ student.username }}</div>
+                                        <small class="text-muted">{{ student.email }}</small>
+                                    </div>
+                                </div>
+                            </td>
+
+                            <td>
+                                {{ student.date_joined|date:"M d, Y" }}
+                            </td>
+
+                            <td>
+                                {% if student.is_active %}
+                                    <span class="badge bg-success-subtle text-success">Active</span>
+                                {% else %}
+                                    <span class="badge bg-danger-subtle text-danger">Inactive</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="3" class="text-center text-muted py-3">
+                                No students found
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+
+                </table>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- QUICK ACTIONS -->
+    <div class="col-lg-4">
+        <div class="quick-actions">
+            <h6 class="fw-semibold mb-3">Quick Actions</h6>
+
+            <a href="{% url 'admin_panel:add_student' %}" class="quick-btn">
+                <i class="fas fa-user-plus"></i> Add New Student
+            </a>
+            <a href="{% url 'admin_panel:add_course' %}" class="quick-btn">
+                <i class="fas fa-book-medical"></i> Create Course
+            </a>
+            <a href="{% url 'admin_panel:add_enrollment' %}" class="quick-btn">
+                <i class="fas fa-clipboard-check"></i> Enroll Student
+            </a>
+
+           
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

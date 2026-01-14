@@ -1,0 +1,114 @@
+{% extends "student_dashboard_base.html" %}
+
+{% block title %}Student Dashboard{% endblock %}
+
+{% block dashboard_content %}
+
+<!-- WELCOME -->
+<h4 class="fw-semibold mb-4">
+    Welcome back, {{ request.user.username }}!
+</h4>
+
+<!-- STATS -->
+<div class="row g-3 mb-4">
+
+    <!-- ENROLLED -->
+    <div class="col-md-4">
+        <div class="card border-0 shadow-sm rounded-4 p-3">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <small class="text-muted">ENROLLED COURSES</small>
+                    <h3 class="fw-bold mb-0">{{ enrolled_count }}</h3>
+                </div>
+                <i class="fa-solid fa-book fa-xl text-primary"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- IN PROGRESS -->
+    <div class="col-md-4">
+        <div class="card border-0 shadow-sm rounded-4 p-3">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <small class="text-muted">IN PROGRESS</small>
+                    <h3 class="fw-bold mb-0">{{ in_progress_count }}</h3>
+                </div>
+                <i class="fa-solid fa-spinner fa-xl text-warning"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- COMPLETED -->
+    <div class="col-md-4">
+        <div class="card border-0 shadow-sm rounded-4 p-3">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <small class="text-muted">COMPLETED</small>
+                    <h3 class="fw-bold mb-0">{{ completed_count }}</h3>
+                </div>
+                <i class="fa-solid fa-circle-check fa-xl text-success"></i>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- ENROLLMENTS TABLE -->
+<div class="card border-0 shadow-sm rounded-4">
+
+    <div class="card-body">
+
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h6 class="fw-semibold mb-0">My Enrollments</h6>
+            <a href="{% url 'courses:courses' %}" class="btn btn-primary btn-sm">
+                Browse All Courses
+            </a>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>Course Name</th>
+                        <th>Status</th>
+                        <th>Enrolled Date</th>
+                        <th class="text-end">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    {% for enrollment in enrollments %}
+                    <tr>
+                        <td>{{ enrollment.course.title }}</td>
+
+                        <td>
+                            <span class="badge bg-warning-subtle text-warning">
+                                {{ enrollment.status }}
+                            </span>
+                        </td>
+
+                        <td>{{ enrollment.enrolled_at|date:"M d, Y" }}</td>
+
+                        <td class="text-end">
+                            <a href="{% url 'courses:detail' enrollment.course.id %}"
+                               class="btn btn-sm btn-outline-primary">
+                                <i class="fa-solid fa-eye me-1"></i> View
+                            </a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4" class="text-center text-muted py-3">
+                            No enrollments yet
+                        </td>
+                    </tr>
+                    {% endfor %}
+
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}

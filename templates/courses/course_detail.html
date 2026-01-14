@@ -1,0 +1,118 @@
+{% extends "student_dashboard_base.html" %}
+
+{% block dashboard_content %}
+
+<div class="container-fluid ">
+
+
+  <div class="card border-0 shadow-sm rounded-4 m-1">
+    ads
+
+    <!-- IMAGE -->
+    <img src="{{ course.image.url }}" onerror="this.src='/static/images/course-default.jpg'" class="rounded-top-4"
+      style="height:350px; object-fit:cover;">
+
+    <!-- TITLE + META ROW -->
+    <div class="d-flex justify-content-between align-items-start mx-4">
+
+      <!-- LEFT: TITLE -->
+      <h3 class="fw-bold mt-3">
+        {{ course.title }}
+      </h3>
+
+      <!-- RIGHT: DURATION + STATUS -->
+      <div class="d-flex gap-3">
+
+        <!-- DURATION -->
+        <div class="border rounded-2 px-3 py-1 text-center small">
+          <div class="text-muted fw-semibold">Duration</div>
+          <div class="fw-semibold text-primary">
+            ⏱ {{ course.formatted_duration }}
+          </div>
+        </div>
+
+        <!-- STATUS -->
+        <div class="border rounded-2 px-3 py-1 text-center small">
+          <div class="text-muted fw-semibold">Status</div>
+          dsa
+
+
+          {% if is_enrolled %}
+          <div class="fw-semibold
+              {% if enrollment_status == 'Pending' %}text-warning
+              {% elif enrollment_status == 'In Progress' %}text-info
+              {% else %}text-success{% endif %}">
+            {{ enrollment_status }}
+          </div>
+          {% else %}
+          <div class="fw-semibold text-muted">
+            Not Enrolled
+          </div>
+          {% endif %}
+        </div>
+
+      </div>
+
+    </div>
+
+
+
+
+
+    <!-- DESCRIPTION -->
+    <p class="text-muted m-3">
+      {{ course.description }}
+    </p>
+    {% if is_enrolled and enrollment_status == "in_progress" or enrollment_status == "completed" %}
+    {% if course.video_url %}
+    <div class="m-4">
+      <a href="{{ course.video_url }}" target="_blank" class="btn btn-outline-primary">
+        ▶ Watch Course Video
+      </a>
+    </div>
+    {% endif %}
+    {% endif %}
+
+
+
+
+
+    <!-- ACTIONS -->
+    <div class="d-flex gap-3 m-4">
+
+      <a href="{% url 'courses:courses' %}" class="btn btn-outline-secondary">
+        ← Back to Courses
+      </a>
+
+      {% if not is_enrolled %}
+      <!-- NOT ENROLLED -->
+      <a href="{% url 'enrollments:enroll' course.id %}" class="btn btn-primary">
+        Enroll Now
+      </a>
+
+      {% else %}
+      {% if enrollment_status == "in_progress" %}
+      <!-- ONLY IN PROGRESS -->
+      <form method="post" class="d-inline">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-success">
+          Complete Course
+        </button>
+      </form>
+
+      {% elif enrollment_status == "completed" %}
+      <button class="btn btn-success" disabled>
+        ✅ Course Completed
+      </button>
+      {% endif %}
+      {% endif %}
+
+    </div>
+
+
+  </div>
+</div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,83 @@
+{% extends "admin/admin_base.html" %}
+{% block title %}Edit Student{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-center">
+    <div class="card border-0 shadow-sm rounded-4 p-4"
+         style="max-width: 1000px; width: 100%;">
+
+        <h5 class="fw-semibold mb-4">
+            Edit Student — {{ student.username }}
+        </h5>
+
+        <form method="post" enctype="multipart/form-data" novalidate>
+            {% csrf_token %}
+
+            <!-- USERNAME -->
+            <div class="mb-3">
+                <label class="form-label">Username</label>
+                {{ form.username }}
+                <small class="text-muted">
+                    Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.
+                </small>
+            </div>
+
+            <!-- EMAIL -->
+            <div class="mb-3">
+                <label class="form-label">Email address</label>
+                {{ form.email }}
+            </div>
+
+            <!-- PHONE -->
+            <div class="mb-3">
+                <label class="form-label">Phone</label>
+                {{ form.phone }}
+            </div>
+
+            <!-- DATE OF BIRTH -->
+            <div class="mb-3">
+                <label class="form-label">Date of birth</label>
+                {{ form.date_of_birth }}
+            </div>
+
+            <!-- GENDER -->
+            <div class="mb-3">
+                <label class="form-label">Gender</label>
+                {{ form.gender }}
+            </div>
+
+            <!-- PROFILE PICTURE -->
+            <div class="mb-4">
+                <label class="form-label">Profile picture</label>
+                {{ form.profile_picture }}
+            </div>
+
+            <!-- ACTIVE -->
+            {% if form.is_active %}
+            <div class="form-check mb-4">
+                {{ form.is_active }}
+                <label class="form-check-label ms-2 fw-semibold">
+                    Active
+                </label>
+                <div class="form-text text-muted">
+                    Designates whether this user should be treated as active.
+                    Unselect this instead of deleting accounts.
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- ACTIONS -->
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-primary px-4">
+                    Save Changes
+                </button>
+                <a href="{% url 'admin_panel:students' %}" class="btn btn-light">
+                    Cancel
+                </a>
+            </div>
+
+        </form>
+
+    </div>
+</div>
+{% endblock %}

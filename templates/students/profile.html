@@ -1,0 +1,150 @@
+{% extends "student_dashboard_base.html" %}
+{% block dashboard_content %}
+
+<div class="d-flex justify-content-center mt-5">
+
+  <div class="card shadow-sm border-0 rounded-4"
+       style="max-width: 850px; width: 100%;">
+
+    <div class="card-body p-4">
+
+      <h5 class="fw-semibold mb-4 text-primary">My Profile</h5>
+
+      <div class="row align-items-center">
+
+        <!-- LEFT AVATAR -->
+        <div class="col-md-4 text-center border-end">
+
+          <img src="{{ request.user.profile_picture.url }}"
+               onerror="this.src='/media/profile_pics/default.png'"
+               class="rounded-circle mb-3"
+               style="width:130px;height:130px;object-fit:cover;"> 
+
+          <h6 class="fw-bold mb-0">{{ request.user.username }}</h6>
+          <small class="text-muted">Student</small>
+
+        </div>
+
+        <!-- RIGHT DETAILS -->
+        <div class="col-md-8 ps-md-4">
+
+          <!-- VIEW MODE -->
+          <div id="viewProfile">
+
+            <div class="row mb-3">
+              <div class="col-4 text-muted">Username</div>
+              <div class="col-8">{{ request.user.username }}</div>
+            </div>
+
+            <div class="row mb-3">
+              <div class="col-4 text-muted">Email</div>
+              <div class="col-8">{{ request.user.email }}</div>
+            </div>
+
+            <div class="row mb-3">
+              <div class="col-4 text-muted">Phone</div>
+              <div class="col-8">{{ request.user.phone|default:"—" }}</div>
+            </div>
+
+            <div class="row mb-3">
+              <div class="col-4 text-muted">Gender</div>
+              <div class="col-8">{{ request.user.get_gender_display|default:"—" }}</div>
+            </div>
+
+            <div class="row mb-3">
+              <div class="col-4 text-muted">Date of Birth</div>
+              <div class="col-8">{{ request.user.date_of_birth|default:"—" }}</div>
+            </div>
+
+            <div class="row mb-3">
+              <div class="col-4 text-muted">Date Joined</div>
+              <div class="col-8">{{ request.user.date_joined|date:"F d, Y" }}</div>
+            </div>
+
+            <button class="btn btn-outline-primary mt-3"
+                    onclick="toggleEdit()">
+              Change your profile
+            </button>
+
+          </div>
+
+          <!-- EDIT MODE -->
+          <form method="post" enctype="multipart/form-data"
+                class="d-none" id="editProfile">
+            {% csrf_token %}
+
+            <div class="row mb-3">
+              <div class="col-4 text-muted">Email</div>
+              <div class="col-8">
+                <input type="email" name="email"
+                       class="form-control"
+                       value="{{ request.user.email }}">
+              </div>
+            </div>
+
+            <div class="row mb-3">
+              <div class="col-4 text-muted">Phone</div>
+              <div class="col-8">
+                <input type="text" name="phone"
+                       class="form-control"
+                       value="{{ request.user.phone }}">
+              </div>
+            </div>
+
+            <div class="row mb-3">
+              <div class="col-4 text-muted">Gender</div>
+              <div class="col-8">
+                <select name="gender" class="form-select">
+                  <option value="">Select</option>
+                  <option value="M" {% if request.user.gender == "M" %}selected{% endif %}>Male</option>
+                  <option value="F" {% if request.user.gender == "F" %}selected{% endif %}>Female</option>
+                  <option value="O" {% if request.user.gender == "O" %}selected{% endif %}>Other</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="row mb-3">
+              <div class="col-4 text-muted">Date of Birth</div>
+              <div class="col-8">
+                <input type="date" name="date_of_birth"
+                       class="form-control"
+                       value="{{ request.user.date_of_birth|date:'Y-m-d' }}">
+              </div>
+            </div>
+
+            <div class="row mb-3">
+              <div class="col-4 text-muted">Profile Picture</div>
+              <div class="col-8">
+                <input type="file" name="profile_picture"
+                       class="form-control">
+              </div>
+            </div>
+
+            <div class="d-flex gap-3 mt-4">
+              <button type="button"
+                      class="btn btn-secondary"
+                      onclick="toggleEdit()">Cancel</button>
+              <button type="submit"
+                      class="btn btn-primary">
+                Save Changes
+              </button>
+            </div>
+
+          </form>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<script>
+function toggleEdit() {
+  document.getElementById("viewProfile").classList.toggle("d-none");
+  document.getElementById("editProfile").classList.toggle("d-none");
+}
+</script>
+
+{% endblock %}

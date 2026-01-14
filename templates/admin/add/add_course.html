@@ -1,0 +1,87 @@
+{% extends "admin/admin_base.html" %}
+
+{% block title %}Add Course{% endblock %}
+
+{% block content %}
+
+<div class="d-flex justify-content-center">
+  <div class="card border-0 shadow-sm rounded-4 p-4"
+       style="max-width: 1000px; width: 100%">
+
+    <h5 class="fw-semibold mb-4">Add Course</h5>
+
+    <form method="post" enctype="multipart/form-data" novalidate>
+      {% csrf_token %}
+
+      <!-- TITLE -->
+      <div class="mb-3">
+        <label class="form-label">Course Title *</label>
+        <input type="text"
+               name="title"
+               class="form-control form-control-lg"
+               required>
+      </div>
+
+      <!-- CODE -->
+      <div class="mb-3">
+        <label class="form-label">Course Code *</label>
+        <input type="text"
+               name="course_code"
+               class="form-control form-control-lg"
+               required>
+      </div>
+
+      <!-- DESCRIPTION -->
+      <div class="mb-3">
+        <label class="form-label">Description *</label>
+        <textarea name="description"
+                  rows="4"
+                  class="form-control"
+                  required></textarea>
+      </div>
+
+      <!-- DURATION -->
+      <div class="mb-3">
+        <label class="form-label">Duration (minutes) *</label>
+        <input type="number"
+               name="duration_minutes"
+               class="form-control form-control-lg"
+               min="1"
+               required>
+      </div>
+
+      <!-- VIDEO -->
+      <div class="mb-3">
+        <label class="form-label">Video URL *</label>
+        <input type="url"
+               name="video_url"
+               class="form-control"
+               required>
+      </div>
+
+      <!-- IMAGE -->
+      <div class="mb-4">
+        <label class="form-label">Course Image *</label>
+        <input type="file"
+               name="image"
+               class="form-control"
+               accept="image/*"
+               required>
+      </div>
+
+      <!-- ACTIONS -->
+      <div class="d-flex gap-2">
+        <button type="submit" class="btn btn-primary px-4">
+          Save
+        </button>
+        <a href="{% url 'courses:courses' %}" class="btn btn-light">
+          Cancel
+        </a>
+      </div>
+
+    </form>
+
+  </div>
+</div>
+
+{% endblock %}

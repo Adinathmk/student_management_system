@@ -1,0 +1,129 @@
+{% extends 'admin/admin_base.html' %}
+
+{% block title %}
+  Students Management
+{% endblock %}
+
+{% block content %}
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h4 class="fw-semibold mb-0">Students Management</h4>
+
+    <a href="{% url 'admin_panel:add_student' %}" class="btn btn-primary"><i class="fas fa-plus me-1"></i> Add Student</a>
+  </div>
+
+  <div class="card border-0 shadow-sm rounded-4">
+    <!-- SEARCH (UI ONLY) -->
+    <div class="card-body border-bottom">
+      <form method="get">
+        <div class="row">
+          <div class="col-md-6 ms-auto">
+            <div class="input-group">
+              <input type="text" name="q" value="{{ request.GET.q }}" class="form-control" placeholder="Search students..." />
+              <button class="btn btn-primary" type="submit"><i class="fas fa-search"></i></button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <!-- TABLE -->
+    <div class="table-responsive">
+      <table class="table align-middle mb-0">
+        <thead class="table-light">
+          <tr>
+            <th>Profile</th>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Acitve</th>
+            <th>Phone</th>
+            <th class="text-center">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for student in students %}
+            <tr>
+              <td>
+                <img src="{{ student.profile_picture.url }}" class="rounded-circle" width="40" height="40" onerror="this.src='/static/images/default-user.png'" />
+              </td>
+
+              <td class="fw-semibold">{{ student.username }}</td>
+              <td>{{ student.email }}</td>
+              <td>
+                {% if student.is_active %}
+                  <span class="badge bg-success-subtle text-success">Active</span>
+                {% else %}
+                  <span class="badge bg-danger-subtle text-danger">Inactive</span>
+                {% endif %}
+              </td>
+              <td>{{ student.phone|default:'—' }}</td>
+
+              <td class="text-center">
+                <a href="{% url 'admin_panel:edit_student' student.id %}" class="btn btn-info btn-sm text-white"><i class="fas fa-pen"></i></a>
+                <form method="post" action="{% url 'admin_panel:delete_student' student.id %}" style="display:inline;">
+                  {% csrf_token %}
+                  <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?');"><i class="fas fa-trash"></i></button>
+                </form>
+              </td>
+            </tr>
+          {% empty %}
+            <tr>
+              <td colspan="5" class="text-center text-muted py-4">No students found</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <!-- PAGINATION (UI ONLY) -->
+    <!-- PAGINATION -->
+    <div class="card-body border-top">
+      <nav class="d-flex justify-content-center">
+        <ul class="pagination mb-0">
+          <!-- Previous -->
+          {% if page_obj.has_previous %}
+            <li class="page-item">
+              <a class="page-link"
+                href="?page={{ page_obj.previous_page_number }}{% if query %}
+                  &q={{ query }}
+                {% endif %}">
+                Previous
+              </a>
+            </li>
+          {% else %}
+            <li class="page-item disabled">
+              <span class="page-link">Previous</span>
+            </li>
+          {% endif %}
+
+          <!-- Page Numbers -->
+          {% for num in page_obj.paginator.page_range %}
+            <li class="page-item {% if page_obj.number == num %}active{% endif %}">
+              <a class="page-link"
+                href="?page={{ num }}{% if query %}
+                  &q={{ query }}
+                {% endif %}">
+                {{ num }}
+              </a>
+            </li>
+          {% endfor %}
+
+          <!-- Next -->
+          {% if page_obj.has_next %}
+            <li class="page-item">
+              <a class="page-link"
+                href="?page={{ page_obj.next_page_number }}{% if query %}
+                  &q={{ query }}
+                {% endif %}">
+                Next
+              </a>
+            </li>
+          {% else %}
+            <li class="page-item disabled">
+              <span class="page-link">Next</span>
+            </li>
+          {% endif %}
+        </ul>
+      </nav>
+    </div>
+  </div>
+{% endblock %}
