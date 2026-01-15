@@ -60,13 +60,12 @@ def students_management(request):
 
     students = students.order_by("-date_joined")
 
-    # PAGINATION
-    paginator = Paginator(students, 5)  # 10 students per page
+    paginator = Paginator(students, 5)  
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
 
     context = {
-        "students": page_obj,     # important
+        "students": page_obj,    
         "page_obj": page_obj,
         "query": query,
     }
@@ -92,7 +91,7 @@ def courses_management(request):
         "courses": courses
     })
 
-from django.db.models import Q
+
 
 @login_required
 def enrollments_management(request):
@@ -103,7 +102,6 @@ def enrollments_management(request):
         "student", "course"
     )
 
-    # 🔍 SEARCH
     if query:
         enrollments = enrollments.filter(
             Q(student__username__icontains=query) |
@@ -112,7 +110,6 @@ def enrollments_management(request):
             Q(course__course_code__icontains=query)
         )
 
-    # 🎯 FILTER BY STATUS
     if status:
         enrollments = enrollments.filter(status=status)
 
@@ -249,7 +246,6 @@ def edit_course(request, pk):
         course.duration_minutes = request.POST.get("duration_minutes")
         course.video_url = request.POST.get("video_url")
 
-        # Update image only if uploaded
         if request.FILES.get("image"):
             course.image = request.FILES.get("image")
 
@@ -286,14 +282,13 @@ def edit_enrollment(request, pk):
     students = User.objects.filter(role="student")
     courses = Courses.objects.filter(is_active=True)
 
-    old_status = enrollment.status  # ✅ store old status
+    old_status = enrollment.status  
 
     if request.method == "POST":
         student_id = request.POST.get("student")
         course_id = request.POST.get("course")
         status = request.POST.get("status")
 
-        # Prevent duplicate enrollment
         exists = Enrollment.objects.exclude(pk=pk).filter(
             student_id=student_id,
             course_id=course_id
@@ -310,7 +305,6 @@ def edit_enrollment(request, pk):
             enrollment.status = status
             enrollment.save()
 
-            # ✅ SEND EMAIL ONLY WHEN STATUS CHANGES TO "Processing"
             if old_status != "in_progress" and status == "in_progress":
                 if enrollment.student.email:
                     send_mail(

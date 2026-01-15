@@ -27,7 +27,6 @@ class StudentRegisterForm(UserCreationForm):
 
         self.fields["email"].required = True
 
-        # 🔥 FORCE CHECKBOX FOR is_active
         self.fields["is_active"].widget = forms.CheckboxInput()
 
         for field_name, field in self.fields.items():

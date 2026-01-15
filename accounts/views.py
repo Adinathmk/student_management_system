@@ -9,6 +9,7 @@ from django.conf import settings
 
 
 
+
 def register_view(request):
     if request.method == "POST":
         form = StudentRegisterForm(request.POST, request.FILES)
@@ -34,7 +35,6 @@ def register_view(request):
         form.fields.pop("is_active", None)
 
     return render(request, "accounts/register.html", {"form": form})
-
 
 
 def login_view(request):

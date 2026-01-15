@@ -5,9 +5,7 @@ class Courses(models.Model):
     course_code = models.CharField(max_length=20, unique=True)
     description = models.TextField()
 
-    duration_minutes = models.PositiveIntegerField(
-        help_text="Total course duration in minutes"
-    )
+    duration_minutes = models.PositiveIntegerField()
 
     is_active = models.BooleanField(default=True)
 
@@ -15,7 +13,6 @@ class Courses(models.Model):
 
     video_url = models.URLField(
         max_length=1000,
-        help_text="YouTube video link for this course"
     )
 
     created_at = models.DateTimeField(auto_now_add=True)
