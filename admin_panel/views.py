@@ -21,12 +21,12 @@ from django.contrib.auth.decorators import login_required
 
 @login_required
 def admin_dashboard(request):
-    # 🔢 STATS
+    
     total_students = User.objects.filter(role="student").count()
     active_courses = Courses.objects.filter(is_active=True).count()
     total_enrollments = Enrollment.objects.count()
 
-    # 👤 RECENT STUDENTS (latest 5)
+   
     recent_students = (
         User.objects
         .filter(role="student")

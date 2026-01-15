@@ -8,11 +8,8 @@ from enrollments.models import Enrollment
 @login_required
 def courses_list_view(request):
     courses = Courses.objects.filter(is_active=True)
-
-    # Get user's enrollments once
     enrollments = Enrollment.objects.filter(student=request.user)
 
-    # Attach enrollment status to each course
     for course in courses:
         enrollment = enrollments.filter(course=course).first()
         course.enrollment_status = enrollment.status if enrollment else None

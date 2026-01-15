@@ -6,7 +6,7 @@
 
 
   <div class="card border-0 shadow-sm rounded-4 m-1">
-    ads
+
 
     <!-- IMAGE -->
     <img src="{{ course.image.url }}" onerror="this.src='/static/images/course-default.jpg'" class="rounded-top-4"
@@ -34,10 +34,7 @@
         <!-- STATUS -->
         <div class="border rounded-2 px-3 py-1 text-center small">
           <div class="text-muted fw-semibold">Status</div>
-          dsa
-
-
-          {% if is_enrolled %}
+            {% if is_enrolled %}
           <div class="fw-semibold
               {% if enrollment_status == 'Pending' %}text-warning
               {% elif enrollment_status == 'In Progress' %}text-info
@@ -116,3 +113,12 @@
 </div>
 
 {% endblock %}
+
+
+
+
+
+
+
+
+
