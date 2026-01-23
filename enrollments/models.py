@@ -1,4 +1,4 @@
-# enrollments/models.py
+    # enrollments/models.py
 from django.db import models
 from django.conf import settings
 from courses.models import Courses
@@ -17,7 +17,8 @@ class Enrollment(models.Model):
     student = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
-        related_name="enrollments"
+        related_name="enrollments",
+        limit_choices_to={"role": "student"}
     )
 
     course = models.ForeignKey(
